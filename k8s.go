@@ -7,8 +7,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/cockroachdb/errors"
 	"github.com/gin-gonic/gin"
+	"github.com/numbergroup/errors"
 	"github.com/sirupsen/logrus"
 )
 
