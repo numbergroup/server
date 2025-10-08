@@ -71,3 +71,50 @@ func GetPagenation(c *gin.Context, maxPageSize, defaultPageSize int64) (int64, i
 
 	return page, pageSize, nil
 }
+
+func getUint64(val, key string, maxVal, defaultVal uint64) (uint64, error) {
+	if len(val) == 0 {
+		return defaultVal, nil
+	}
+	out, err := strconv.ParseUint(val, 10, 64)
+	if err != nil {
+		return 0, errors.Wrapf(err, "failed to parse int64 param \"%s\" value \"%s\"", key, val)
+	}
+	if maxVal != 0 && out > maxVal {
+		return 0, errors.Errorf("param \"%s\" too large, must be less than %d", key, maxVal)
+	}
+	return out, nil
+}
+
+// GetUint64Param gets the uint64 parameter from the gin context, and returns the value or the default value if the parameter is not set.
+// maxVal of 0 means no max.
+func GetUint64Param(c *gin.Context, key string, maxVal, defaultVal uint64) (uint64, error) {
+	return getUint64(c.Param(key), key, maxVal, defaultVal)
+}
+
+// GetUint64Query gets the uint64 query parameter from the gin context, and returns the value or the default value if the parameter is not set.
+// maxVal of 0 means no max.
+func GetUint64Query(c *gin.Context, key string, maxVal, defaultVal uint64) (uint64, error) {
+	return getUint64(c.Query(key), key, maxVal, defaultVal)
+}
+
+func getBool(val, key string, defaultVal bool) (bool, error) {
+	if len(val) == 0 {
+		return defaultVal, nil
+	}
+	out, err := strconv.ParseBool(val)
+	if err != nil {
+		return false, errors.Wrapf(err, "failed to parse bool param \"%s\" value \"%s\"", key, val)
+	}
+	return out, nil
+}
+
+// GetBoolParam gets the bool parameter from the gin context, and returns the value or the default value if the parameter is not set.
+func GetBoolParam(c *gin.Context, key string, defaultVal bool) (bool, error) {
+	return getBool(c.Param(key), key, defaultVal)
+}
+
+// GetBoolQuery gets the bool query parameter from the gin context, and returns the value or the default value if the parameter is not set.
+func GetBoolQuery(c *gin.Context, key string, defaultVal bool) (bool, error) {
+	return getBool(c.Query(key), key, defaultVal)
+}
