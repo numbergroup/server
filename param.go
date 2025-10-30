@@ -118,3 +118,111 @@ func GetBoolParam(c *gin.Context, key string, defaultVal bool) (bool, error) {
 func GetBoolQuery(c *gin.Context, key string, defaultVal bool) (bool, error) {
 	return getBool(c.Query(key), key, defaultVal)
 }
+
+// GetInt32Param gets the int parameter from the gin context, and returns the value or the default value if the parameter is not set.
+// maxVal of -1 means no max.
+func GetInt32Param(c *gin.Context, key string, maxVal, defaultVal int32) (int32, error) {
+	val, err := getInt64(c.Param(key), key, int64(maxVal), int64(defaultVal))
+	if err != nil {
+		return 0, err
+	}
+
+	if val > 0x7FFFFFFF {
+		return 0, errors.New("param is too large")
+	}
+	if val < -0x80000000 {
+		return 0, errors.New("param is too small")
+	}
+	return int32(val), nil
+}
+
+// GetInt32Query gets the int query parameter from the gin context, and returns the value or the default value if the parameter is not set.
+// maxVal of -1 means no max.
+func GetInt32Query(c *gin.Context, key string, maxVal, defaultVal int32) (int32, error) {
+	val, err := getInt64(c.Query(key), key, int64(maxVal), int64(defaultVal))
+	if err != nil {
+		return 0, err
+	}
+
+	if val > 0x7FFFFFFF {
+		return 0, errors.New("param is too large")
+	}
+	if val < -0x80000000 {
+		return 0, errors.New("param is too small")
+	}
+	return int32(val), nil
+}
+
+// GetIntParam gets the int parameter from the gin context, and returns the value or the default value if the parameter is not set.
+// maxVal of -1 means no max.
+func GetIntParam(c *gin.Context, key string, maxVal, defaultVal int) (int, error) {
+	if strconv.IntSize == 32 { //  32-bit system
+		val, err := GetInt32Param(c, key, int32(maxVal), int32(defaultVal))
+		return int(val), err
+	}
+
+	val, err := GetInt64Param(c, key, int64(maxVal), int64(defaultVal))
+	return int(val), err
+}
+
+// GetIntQuery gets the int query parameter from the gin context, and returns the value or the default value if the parameter is not set.
+// maxVal of -1 means no max.
+func GetIntQuery(c *gin.Context, key string, maxVal, defaultVal int) (int, error) {
+	if strconv.IntSize == 32 { //  32-bit system
+		val, err := GetInt32Query(c, key, int32(maxVal), int32(defaultVal))
+		return int(val), err
+	}
+	val, err := GetInt64Query(c, key, int64(maxVal), int64(defaultVal))
+	return int(val), err
+}
+
+// GetUint32Param gets the int parameter from the gin context, and returns the value or the default value if the parameter is not set.
+// maxVal of 0 means no max.
+func GetUint32Param(c *gin.Context, key string, maxVal, defaultVal uint32) (uint32, error) {
+	val, err := GetUint64Param(c, key, uint64(maxVal), uint64(defaultVal))
+	if err != nil {
+		return 0, err
+	}
+
+	if val > 0xFFFFFFFF {
+		return 0, errors.New("param is too large")
+	}
+	return uint32(val), nil
+}
+
+// GetInt32Query gets the int query parameter from the gin context, and returns the value or the default value if the parameter is not set.
+// maxVal of 0 means no max.
+func GetUint32Query(c *gin.Context, key string, maxVal, defaultVal uint32) (uint32, error) {
+	val, err := GetUint64Query(c, key, uint64(maxVal), uint64(defaultVal))
+	if err != nil {
+		return 0, err
+	}
+
+	if val > 0xFFFFFFFF {
+		return 0, errors.New("param is too large")
+	}
+	return uint32(val), nil
+}
+
+// GetIntParam gets the int parameter from the gin context, and returns the value or the default value if the parameter is not set.
+// maxVal of 0 means no max.
+func GetUintParam(c *gin.Context, key string, maxVal, defaultVal uint) (uint, error) {
+	if strconv.IntSize == 32 { //  32-bit system
+		val, err := GetUint32Param(c, key, uint32(maxVal), uint32(defaultVal))
+		return uint(val), err
+	}
+
+	val, err := GetUint64Param(c, key, uint64(maxVal), uint64(defaultVal))
+	return uint(val), err
+}
+
+// GetIntQuery gets the int query parameter from the gin context, and returns the value or the default value if the parameter is not set.
+// maxVal of 0 means no max.
+func GetUintQuery(c *gin.Context, key string, maxVal, defaultVal uint) (uint, error) {
+	if strconv.IntSize == 32 { //  32-bit system
+		val, err := GetUint32Query(c, key, uint32(maxVal), uint32(defaultVal))
+		return uint(val), err
+	}
+	val, err := GetUint64Query(c, key, uint64(maxVal), uint64(defaultVal))
+	return uint(val), err
+}
