@@ -3,9 +3,9 @@ package server
 import (
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/numbergroup/errors"
+	"github.com/numbergroup/gin-light"
 )
 
 func getInt64(val, key string, maxVal, defaultVal int64) (int64, error) {

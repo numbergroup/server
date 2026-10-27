@@ -3,7 +3,7 @@ package server
 import (
 	"strings"
 
-	"github.com/gin-gonic/gin"
+	"github.com/numbergroup/gin-light"
 )
 
 // CORSAllowAll sets up the CORS headers to allow all origins, methods and headers.

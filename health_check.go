@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"sync/atomic"
 
-	"github.com/gin-gonic/gin"
+	"github.com/numbergroup/gin-light"
 )
 
 type HealthCheck struct {

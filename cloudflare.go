@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/numbergroup/gin-light"
 )
 
 // CloudflareOriginIP gets the origin IP from the Cloudflare header, or falls back to the client IP if the header is not set.
